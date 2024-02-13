@@ -5,26 +5,14 @@ using simple_Web.DataAccess.Repositories.Comman;
 
 namespace simple_Web.Configurations.LayerConfigurations
 {
-    public static class ServiceLayerConfiguration
+    public static class DataAccessConfiguration
     {
-        public static void AddService(this IServiceCollection services)
+        public static void ConfigureDataAccess(this IServiceCollection services, IConfiguration configuration)
         {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+            string connectionString = configuration.GetConnectionString("DatabaseConnection")!;
+            services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<IAdminService, AdminService>();
-            services.AddScoped<IUserService, UserService>();
-
-            services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<IEmailService, EmailService>();
-            services.AddScoped<IIdentityService, IdentityService>();
-
-            //swagger auth
-            //services.ConfigureSwaggerAuthorize();
-
-            services.AddHttpContextAccessor();
-            services.AddMemoryCache();
-            services.AddHttpContextAccessor();
-            services.AddAutoMapper(typeof(MappingConfiguration));
         }
     }
 }
