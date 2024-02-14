@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using simple_Web.Models;
+using simple_Web.Service.Common.Exceptions;
 using simple_Web.Service.Common.Utils;
 using simple_Web.Service.Interfaces;
 using System.Diagnostics;

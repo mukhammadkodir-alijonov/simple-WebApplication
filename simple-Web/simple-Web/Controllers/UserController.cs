@@ -27,25 +27,25 @@ namespace simple_Web.Controllers
             return View("Index", result);
         }
 
-        [HttpPut("delete")]
+        [HttpPost("delete")]
         public async Task<IActionResult> DeleteAsync(List<int> ids)
         {
             var result = await ExecuteActionAsync(() => _userService.DeleteAsync(ids));
-            return result ? RedirectToAction(nameof(Index)) : NotFound();
+            return result ? RedirectToAction("Index", "Home") : NotFound();
         }
 
         [HttpPost("block")]
         public async Task<IActionResult> BlockAsync(List<int> ids)
         {
             var result = await ExecuteActionAsync(() => _userService.BlockAsync(ids));
-            return result ? RedirectToAction(nameof(Index)) : NotFound();
+            return result ? RedirectToAction("Index", "Home") : NotFound();
         }
 
-        [HttpPut("activate")]
-        public async Task<IActionResult> ActivateAsync(List<int> ids)
+        [HttpPost("unblock")]
+        public async Task<IActionResult> UnBlockAsync(List<int> ids)
         {
             var result = await ExecuteActionAsync(() => _userService.ActiveAsync(ids));
-            return result ? RedirectToAction(nameof(Index)) : NotFound();
+            return result ? RedirectToAction("Index", "Home") : NotFound();
         }
 
         private async Task<bool> ExecuteActionAsync(Func<Task<bool>> action)
