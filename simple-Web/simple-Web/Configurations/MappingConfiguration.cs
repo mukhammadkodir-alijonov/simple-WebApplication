@@ -9,7 +9,6 @@ namespace simple_Web.Configurations
     {
         public MappingConfiguration()
         {
-            CreateMap<AdminRegisterDto, Admin>().ReverseMap();
             CreateMap<AccountRegisterDto, User>().ReverseMap();
         }
     }

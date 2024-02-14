@@ -13,7 +13,6 @@ namespace simple_Web.Configurations.LayerConfigurations
         {
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<IUserService, UserService>();
 
             services.AddScoped<IAuthService, AuthService>();

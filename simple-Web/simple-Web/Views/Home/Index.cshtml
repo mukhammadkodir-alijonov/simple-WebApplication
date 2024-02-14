@@ -1,8 +1,119 @@
-﻿@{
+﻿@using simple_Web.Service.ViewModels;
+@model List<UserViewModel>
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registry</title>
+    <style>
+        /* Add your CSS styles here */
+        .user-info {
+            text-align: right;
+            padding: 10px;
+        }
+
+            .user-info a {
+                margin-left: 10px;
+            }
+
+        .user-registry-container {
+            margin-top: 20px;
+        }
+
+        .user-registry {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+            .user-registry caption {
+                font-weight: bold;
+                font-size: 1.2em;
+                margin-bottom: 10px;
+            }
+
+            .user-registry th, .user-registry td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+            }
+
+            .user-registry th {
+                background-color: #f2f2f2;
+            }
+    </style>
+</head>
+<body>
+    <!--main-section-->
+    <section id="main">
+        <!--user greeting and logout option-->
+        <div class="user-info">
+            <span>Hello, John Lennon!</span>
+            <a asp-controller="accounts" asp-action="logout">
+                Log Out
+            </a>
+        </div>
+        <!--user information table-->
+        <h4>User Control</h4>
+        <div class="user-registry-container">
+            <div class="block-user">
+                <a asp-controller="users" asp-action="block">
+                    <button class="block">Block</button>
+                </a>
+                <a asp-controller="users" asp-action="activate">
+                    <button class="other">Active</button>
+                </a>
+                <a asp-controller="users" asp-action="delete">
+                    <button class="other">Delete</button>
+                </a>
+            </div>
+            <table class="user-registry">
+                <thead>
+                    <tr>
+                        <th>-</th>
+                        <th>id</th>
+                        <th>Name</th>
+                        <th>e-Mail</th>
+                        <th>Last login</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr class="tr-shadow text-dark">
+                            <td class="text-start px-sm-1">
+                                <input class="checker" type="checkbox" id="@user.Id.ToString()" />
+                            </td>
+                            <td class="text-start px-sm-1">
+                                <span class="fw-bold">@user.Id</span>
+                            </td>
+                            <td class="text-start">
+                                <span class="fw-bold px-sm-0 text-gray-500">@user.UserName</span>
+                            </td>
+                            <td class="text-start">
+                                <span class="fw-bold text-gray-500">@user.Email</span>
+                            </td>
+                            <td class="text-start">
+                                <span class="fw-bold px-sm-0 text-gray-500">@user.LastLogin</span>
+                            </td>
+                            <td class="text-start">
+                                <span class="fw-bold text-gray-500">@user.Status.ToString()</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <!--footer-->
+    <footer>
+        <!--copy right-->
+    </footer>
+</body>
+</html>

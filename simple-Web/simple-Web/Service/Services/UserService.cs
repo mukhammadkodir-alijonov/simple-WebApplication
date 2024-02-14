@@ -11,66 +11,74 @@ using simple_Web.DataAccess.DbContexts;
 using simple_Web.Domain.Entities;
 using simple_Web.Service.Common.Utils;
 using simple_Web.Domain.Enums;
+using simple_Web.DataAccess.Repositories.Comman;
 
 namespace simple_Web.Service.Services
 {
-    }
-public class UserService : IUserService
-{
-    private readonly IMapper _mapper;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly AppDbContext _appDbContext;
-    public UserService(IMapper imapper, AppDbContext appDbContext, IUnitOfWork unitOfWork)
+    public class UserService : IUserService
     {
-        this._mapper = imapper;
-        this._unitOfWork = unitOfWork;
-        this._appDbContext = appDbContext;
-    }
-    public async Task<bool> DeleteAsync(List<int> ids)
-    {
-        foreach(var iteam in ids)
+        private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly AppDbContext _appDbContext;
+        public UserService(IMapper imapper, AppDbContext appDbContext, IUnitOfWork unitOfWork)
         {
-            var temp = await _unitOfWork.Users.FindByIdAsync(iteam);
-            if (temp is not null)
-            {
-                _unitOfWork.Users.Delete(iteam);
-            }
+            this._mapper = imapper;
+            this._unitOfWork = unitOfWork;
+            this._appDbContext = appDbContext;
         }
-        var res = await _unitOfWork.SaveChangesAsync();
-        return res > 0;
-    }
-    public async Task<bool> BlockAsync(List<int> ids)
-    {
-        foreach (var iteam in ids)
+        public async Task<PagedList<UserViewModel>> GetAllAysnc(PaginationParams @params)
         {
-            var temp = await _unitOfWork.Users.FindByIdAsync(iteam);
-            if (temp is not null)
+            var query = _unitOfWork.Users.GetAll().OrderBy(x => x.Id)
+                    .Select(x => _mapper.Map<UserViewModel>(x));
+            return await PagedList<UserViewModel>.ToPagedListAsync(query, @params);
+
+        }
+        public async Task<bool> DeleteAsync(List<int> ids)
+        {
+            foreach (var iteam in ids)
             {
-                if(temp.Status != StatusType.Blocked)
+                var temp = await _unitOfWork.Users.FindByIdAsync(iteam);
+                if (temp is not null)
                 {
-                    temp.Status = StatusType.Blocked;
-                    _unitOfWork.Users.Update(iteam,temp);
+                    _unitOfWork.Users.Delete(iteam);
                 }
             }
+            var res = await _unitOfWork.SaveChangesAsync();
+            return res > 0;
         }
-        var res = await _unitOfWork.SaveChangesAsync();
-        return res > 0;
-    }
-    public async Task<bool> ActiveAsync(List<int> ids)
-    {
-        foreach (var iteam in ids)
+        public async Task<bool> BlockAsync(List<int> ids)
         {
-            var temp = await _unitOfWork.Users.FindByIdAsync(iteam);
-            if (temp is not null)
+            foreach (var iteam in ids)
             {
-                if (temp.Status != StatusType.Active)
+                var temp = await _unitOfWork.Users.FindByIdAsync(iteam);
+                if (temp is not null)
                 {
-                    temp.Status = StatusType.Active;
-                    _unitOfWork.Users.Update(iteam, temp);
+                    if (temp.Status != StatusType.Blocked)
+                    {
+                        temp.Status = StatusType.Blocked;
+                        _unitOfWork.Users.Update(iteam, temp);
+                    }
                 }
             }
+            var res = await _unitOfWork.SaveChangesAsync();
+            return res > 0;
         }
-        var res = await _unitOfWork.SaveChangesAsync();
-        return res > 0;
+        public async Task<bool> ActiveAsync(List<int> ids)
+        {
+            foreach (var iteam in ids)
+            {
+                var temp = await _unitOfWork.Users.FindByIdAsync(iteam);
+                if (temp is not null)
+                {
+                    if (temp.Status != StatusType.Active)
+                    {
+                        temp.Status = StatusType.Active;
+                        _unitOfWork.Users.Update(iteam, temp);
+                    }
+                }
+            }
+            var res = await _unitOfWork.SaveChangesAsync();
+            return res > 0;
+        }
     }
 }

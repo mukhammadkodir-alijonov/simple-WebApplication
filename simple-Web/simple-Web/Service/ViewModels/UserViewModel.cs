@@ -8,9 +8,9 @@ namespace simple_Web.Service.ViewModels
         public int Id { get; set; }
         public string UserName { get; set; } = string.Empty;
         public DateTime LastLogin { get; set; }
-        public Role UserRole { get; set; } = Role.User;
         public StatusType Status {  get; set; }
         public string Email { get; set; } = string.Empty;
+        //public bool IsChecked { get; set; } = true;
         public static implicit operator UserViewModel(User model)
         {
             return new UserViewModel()
@@ -18,7 +18,9 @@ namespace simple_Web.Service.ViewModels
                 Id = model.Id,
                 UserName = model.UserName,
                 LastLogin = model.LastLogin,
-                Status = model.Status
+                Email = model.Email,
+                Status = model.Status,
+                //IsChecked = model.IsChecked
             };
         }
     }

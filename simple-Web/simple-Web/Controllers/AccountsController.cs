@@ -19,11 +19,11 @@ namespace simple_Web.Controllers
         public ViewResult Register() => View("Register");
 
         [HttpPost("register")]
-        public async Task<IActionResult> UserRegisterAsync(AdminRegisterDto adminRegisterDto)
+        public async Task<IActionResult> RegisterAsync(AccountRegisterDto accountRegisterDto)
         {
             if (ModelState.IsValid)
             {
-                bool result = await _service.RegisterAsync(adminRegisterDto);
+                bool result = await _service.RegisterAsync(accountRegisterDto);
                 if (result)
                 {
                     return RedirectToAction("login", "accounts", new { area = "" });
@@ -51,22 +51,7 @@ namespace simple_Web.Controllers
                         HttpOnly = true,
                         SameSite = SameSiteMode.Strict
                     });
-                    var role = await _service.RoleCheckerAsync(accountLoginDto.Email);
-                    if (role == "User")
-                    {
-                        return RedirectToAction("Index", "Home", new { area = "" });
-                    }
-                    if (role == "Admin")
-                    {
-                        //return RedirectToAction("Index", "Home", new { area = "administrator" });
-                        return RedirectToRoute(new { area = "administrator", controller = "Home", action = "Index" });
-                    }
-                    else
-                    {
-                        // Foydalanuvchi aniqlanmadi, xatolikni ko'rsatish
-                        ModelState.AddModelError("Email", "Foydalanuvchi topilmadi");
-                        return Login();
-                    }
+                    return RedirectToAction("Index", "Home", new { area = "" });
                 }
                 catch (ModelErrorException modelError)
                 {

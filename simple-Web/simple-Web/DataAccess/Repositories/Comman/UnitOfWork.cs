@@ -8,12 +8,10 @@ namespace simple_Web.DataAccess.Repositories.Comman
     public class UnitOfWork : IUnitOfWork
     {
         public readonly AppDbContext _dbContext;
-        public IAdminRepository Admins { get; }
         public IUserRepository Users { get; }
         public UnitOfWork(AppDbContext dbContext)
         {
             _dbContext = dbContext;
-            Admins = new AdminRepository(_dbContext);
             Users = new UserRepository(_dbContext);
         }
         public EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class

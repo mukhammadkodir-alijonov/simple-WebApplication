@@ -40,7 +40,7 @@ app.UseRouting();
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "SeakHub API V1");
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "simple_Web API V1");
     c.RoutePrefix = "area/swagger";
 });
 app.UseMiddleware<TokenRedirectMiddleware>();
@@ -59,10 +59,5 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.MapAreaControllerRoute(
-   name: "administrator",
-   areaName: "Administrator",
-   pattern: "administrator/{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

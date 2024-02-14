@@ -6,13 +6,9 @@ namespace simple_Web.Service.Interfaces
 {
     public interface IUserService
     {
-        public Task<PagedList<UserViewModel>> GetAllUsernameAysnc(PaginationParams @params);
-        public Task<UserViewModel> GetAsync(int id);
-
-        public Task<bool> UpdateAsync(int id, UserUpdateDto entity);
-
-        public Task<bool> DeleteAsync(int id);
-
-        public Task<UserViewModel> GetEmailAsync(string email);
+        public Task<PagedList<UserViewModel>> GetAllAysnc(PaginationParams @params);
+        public Task<bool> DeleteAsync(List<int> ids);
+        public Task<bool> BlockAsync(List<int> ids);
+        public Task<bool> ActiveAsync(List<int> ids);
     }
 }

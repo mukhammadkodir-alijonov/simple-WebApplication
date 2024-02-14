@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using simple_Web.Domain.Entities;
 using simple_Web.Service.Common.Exceptions;
 using simple_Web.Service.Common.Utils;
-using simple_Web.Service.Dtos;
-using simple_Web.Service.Interfaces.Common;
 using simple_Web.Service.Interfaces;
 using simple_Web.Service.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace simple_Web.Controllers
 {
@@ -12,83 +14,50 @@ namespace simple_Web.Controllers
     public class UserController : Controller
     {
         private readonly IUserService _userService;
-        private readonly IAccountService _accountService;
-        private readonly IIdentityService _identityService;
-        private readonly int _pageSize = 2;
+        private const int PageSize = 10;
 
-        public UserController(IUserService userService, IAccountService accountService, IIdentityService identityService)
+        public UserController(IUserService userService)
         {
-            this._userService = userService;
-            this._accountService = accountService;
-            this._identityService = identityService;
+            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
         }
+
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            return View();
+            var result = await _userService.GetAllAysnc(new PaginationParams(page,PageSize));
+            return View("Index",result);
         }
 
-        [HttpGet("username")]
-        public async Task<IActionResult> GetAllUsernameAsync(int page = 1)
+        [HttpPut("delete")]
+        public async Task<IActionResult> DeleteAsync(List<int> ids)
         {
-            return await HandleExceptionAsync(async () =>
-            {
-                var users = await _userService.GetAllUsernameAysnc(new PaginationParams(page, _pageSize));
-                return Ok(users);
-            });
-        }
-        
-        [HttpGet("userId")]
-        public async Task<ViewResult> Get(int userId)
-        {
-            var user = await _userService.GetAsync(userId);
-            ViewBag.UserId = userId;
-            ViewBag.HomeTitle = "My account";
-            var userView = new UserViewModel()
-            {
-                UserName = user.UserName,
-                Email = user.Email,
-                Status = user.Status
-            };
-            return View("../Users/Index", userView);
+            var result = await ExecuteActionAsync(() => _userService.DeleteAsync(ids));
+            return result ? RedirectToAction(nameof(Index)) : NotFound();
         }
 
-        [HttpGet("update")]
-        public async Task<ViewResult> Update()
+        [HttpPut("block")]
+        public async Task<IActionResult> BlockAsync(List<int> ids)
         {
-            var userId = _identityService.Id!.Value;
-            var user = await _userService.GetAsync(userId);
-            ViewBag.userId = userId;
-            ViewBag.HomeTitle = "User update";
-            var userUpdate = new UserUpdateDto()
-            {
-                UserName = user.UserName,
-                Email = user.Email,
-                Status = user.Status
-            };
-            return View("../Users/Update", userUpdate);
+            var result = await ExecuteActionAsync(() => _userService.BlockAsync(ids));
+            return result ? RedirectToAction(nameof(Index)) : NotFound();
         }
-        [HttpPost("update")]
-        public async Task<IActionResult> UpdateAsync([FromForm] UserUpdateDto userUpdateDto, int userId)
-        {
-            if (ModelState.IsValid)
+
+        [HttpPut("activate")]
+        public async Task<IActionResult> ActivateAsync(List<int> ids)
             {
-                var user = await _userService.UpdateAsync(userId, userUpdateDto);
-                if (user) return RedirectToAction("Index", "Home", new { area = "" });
-                else return RedirectToAction("Update", "Users", new { area = "" });
-            }
-            else return RedirectToAction("Update", "Users", new { area = "" });
+            var result = await ExecuteActionAsync(() => _userService.ActiveAsync(ids));
+            return result ? RedirectToAction(nameof(Index)) : NotFound();
         }
-        
-        private async Task<IActionResult> HandleExceptionAsync(Func<Task<IActionResult>> action)
+
+        private async Task<bool> ExecuteActionAsync(Func<Task<bool>> action)
         {
             try
             {
                 return await action();
             }
-            catch (NotFoundException ex)
+            catch (NotFoundException)
             {
-                return NotFound(ex.Message);
+                return false;
             }
         }
     }

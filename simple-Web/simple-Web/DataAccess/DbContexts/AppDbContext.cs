@@ -10,7 +10,6 @@ namespace simple_Web.DataAccess.DbContexts
         {
         }
         public virtual DbSet<User> Users { get; set; } = default!;
-        public virtual DbSet<Admin> Admins { get; set; } = default!;
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

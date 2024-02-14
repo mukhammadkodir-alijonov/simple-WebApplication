@@ -12,7 +12,7 @@ using simple_Web.DataAccess.DbContexts;
 namespace simple_Web.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240212122529_InitialCreate")]
+    [Migration("20240213111644_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -24,44 +24,6 @@ namespace simple_Web.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("simple_Web.Domain.Entities.Admin", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("LastLogin")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("RegistrationTime")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Salt")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Admins");
-                });
 
             modelBuilder.Entity("simple_Web.Domain.Entities.User", b =>
                 {
@@ -84,9 +46,6 @@ namespace simple_Web.Migrations
 
                     b.Property<DateTime>("RegistrationTime")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("integer");
 
                     b.Property<string>("Salt")
                         .IsRequired()

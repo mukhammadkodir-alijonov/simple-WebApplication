@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using simple_Web.Models;
+using simple_Web.Service.Common.Utils;
+using simple_Web.Service.Interfaces;
 using System.Diagnostics;
 
 namespace simple_Web.Controllers
@@ -7,15 +9,19 @@ namespace simple_Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IUserService _userService;
+        private const int PageSize = 2;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IUserService userService)
         {
             _logger = logger;
+            _userService = userService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            return View();
+            var result = await _userService.GetAllAysnc(new PaginationParams(page, PageSize));
+            return View("Index", result);
         }
 
         public IActionResult Privacy()

@@ -10,5 +10,6 @@ namespace simple_Web.Domain.Entities
         public string Salt { get; set; } = string.Empty;
         public DateTime LastLogin { get; set; }
         public DateTime RegistrationTime { get; set; }
+        //public bool IsChecked { get; set; } = true;
     }
 }
