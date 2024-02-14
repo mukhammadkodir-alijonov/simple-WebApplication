@@ -21,8 +21,7 @@ namespace simple_Web.Service.Services.Common
             var claims = new[]
                {
                 new Claim("Id", user.Id.ToString()),
-                new Claim("LastName", user.UserName),
-                new Claim(ClaimTypes.Role, $"{role}")
+                new Claim("UserName", user.UserName),
             };
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["SecretKey"]!));

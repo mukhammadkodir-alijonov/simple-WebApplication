@@ -1,0 +1,11 @@
+﻿@using simple_Web.Service.ViewModels
+@model AccountBaseViewModel
+
+<div class="d-flex flex-column">
+    <div class="fw-bolder d-flex align-items-center fs-5">
+        @Model.UserName
+    </div>
+</div>
+<div class="menu-item px-5">
+    <a class="menu-link px-5 fw-bold text-dark text-hover-info fs-7" asp-controller="accounts" asp-action="logout">Log Out</a>
+</div>

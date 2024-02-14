@@ -21,7 +21,7 @@ namespace simple_Web.Service.Services.Common
         {
             get
             {
-                var result = _accessor.HttpContext!.User.FindFirst("FirstName");
+                var result = _accessor.HttpContext!.User.FindFirst("UserName");
                 return (result is null) ? String.Empty : result.Value;
             }
         }
