@@ -26,7 +26,7 @@ namespace simple_Web.Controllers
 
         public async Task<IActionResult> Index(int page = 1)
         {
-            ViewBag.UserName = _contextAccessor.HttpContext!.User.FindFirst("UserName")!.Value;
+            ViewBag.UserName = _contextAccessor.HttpContext?.User.FindFirst("UserName")?.Value;
             var result = await _userService.GetAllAysnc(new PaginationParams(page, PageSize));
             return View("Index", result);
         }

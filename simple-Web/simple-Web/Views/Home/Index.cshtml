@@ -1,5 +1,4 @@
 ﻿@using simple_Web.Service.ViewModels;
-@using simple_Web.ViewComponents
 @model List<UserViewModel>
 @{
     ViewData["Title"] = "Home Page";
@@ -57,7 +56,7 @@
         <div class="user-info">
             <span>Hello, <b>@ViewBag.UserName</b></span>
             <a asp-controller="accounts" asp-action="logout">
-                Log Out
+                 Log Out
             </a>
         </div>
         <!--user information table-->
