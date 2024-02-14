@@ -3,7 +3,8 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-
+@{
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -61,54 +62,55 @@
         <!--user information table-->
         <h4>User Control</h4>
         <div class="user-registry-container">
-            <div class="block-user">
-                <a asp-controller="users" asp-action="block">
-                    <button class="block">Block</button>
-                </a>
-                <a asp-controller="users" asp-action="activate">
+                <div class="block-user">
+                    @* <a asp-controller="users" asp-action="block"> *@
+                    <button id="btn-block" type="submit" data-url="@Url.Action("block", "home")" class="block">Block</button>
+                    @* </a> *@
+                    @* <a asp-controller="users" asp-action="activate"> *@
                     <button class="other">Active</button>
-                </a>
-                <a asp-controller="users" asp-action="delete">
+                    @* </a> *@
+                    @* <a asp-controller="users" asp-action="delete"> *@
                     <button class="other">Delete</button>
-                </a>
-            </div>
-            <table class="user-registry">
-                <thead>
-                    <tr>
-                        <th>-</th>
-                        <th>id</th>
-                        <th>Name</th>
-                        <th>e-Mail</th>
-                        <th>Last login</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var user in Model)
-                    {
-                        <tr class="tr-shadow text-dark">
-                            <td class="text-start px-sm-1">
-                                <input class="checker" type="checkbox" id="@user.Id.ToString()" />
-                            </td>
-                            <td class="text-start px-sm-1">
-                                <span class="fw-bold">@user.Id</span>
-                            </td>
-                            <td class="text-start">
-                                <span class="fw-bold px-sm-0 text-gray-500">@user.UserName</span>
-                            </td>
-                            <td class="text-start">
-                                <span class="fw-bold text-gray-500">@user.Email</span>
-                            </td>
-                            <td class="text-start">
-                                <span class="fw-bold px-sm-0 text-gray-500">@user.LastLogin</span>
-                            </td>
-                            <td class="text-start">
-                                <span class="fw-bold text-gray-500">@user.Status.ToString()</span>
-                            </td>
+                    @* </a> *@
+                </div>
+                <table class="user-registry">
+                    <thead>
+                        <tr>
+                            <th>Select</th>
+                            <th>id</th>
+                            <th>Name</th>
+                            <th>e-Mail</th>
+                            <th>Last login</th>
+                            <th>Status</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr class="tr-shadow text-dark">
+                                <td class="text-start px-sm-1">
+                                    <input class="checker" type="checkbox" asp-for="@user.IsChecked" />
+                                    <input type="hidden" asp-for="@user.Id" />
+                                </td>
+                                <td class="text-start px-sm-1">
+                                    <span class="fw-bold">@user.Id</span>
+                                </td>
+                                <td class="text-start">
+                                    <span class="fw-bold px-sm-0 text-gray-500">@user.UserName</span>
+                                </td>
+                                <td class="text-start">
+                                    <span class="fw-bold text-gray-500">@user.Email</span>
+                                </td>
+                                <td class="text-start">
+                                    <span class="fw-bold px-sm-0 text-gray-500">@user.LastLogin</span>
+                                </td>
+                                <td class="text-start">
+                                    <span class="fw-bold text-gray-500">@user.Status.ToString()</span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
         </div>
     </section>
     <!--footer-->
@@ -117,3 +119,21 @@
     </footer>
 </body>
 </html>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var blockButton = document.getElementById('btn-block');
+        var unblockButton = document.getElementById('btn-unblock');
+        var form = document.getElementById('manageUsersForm');
+
+        blockButton.addEventListener('click', function () {
+            form.action = blockButton.getAttribute('data-url');
+            console.log(form);
+            form.submit();
+        });
+
+        unblockButton.addEventListener('click', function () {
+            form.action = unblockButton.getAttribute('data-url');
+            form.submit();
+        });
+    });
+</script>

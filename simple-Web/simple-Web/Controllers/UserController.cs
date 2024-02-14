@@ -10,11 +10,10 @@ using System.Threading.Tasks;
 
 namespace simple_Web.Controllers
 {
-    [Route("users")]
     public class UserController : Controller
     {
         private readonly IUserService _userService;
-        private const int PageSize = 10;
+        private const int PageSize =20;
 
         public UserController(IUserService userService)
         {
@@ -24,8 +23,8 @@ namespace simple_Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(int page = 1)
         {
-            var result = await _userService.GetAllAysnc(new PaginationParams(page,PageSize));
-            return View("Index",result);
+            var result = await _userService.GetAllAysnc(new PaginationParams(page, PageSize));
+            return View("Index", result);
         }
 
         [HttpPut("delete")]
@@ -35,7 +34,7 @@ namespace simple_Web.Controllers
             return result ? RedirectToAction(nameof(Index)) : NotFound();
         }
 
-        [HttpPut("block")]
+        [HttpPost("block")]
         public async Task<IActionResult> BlockAsync(List<int> ids)
         {
             var result = await ExecuteActionAsync(() => _userService.BlockAsync(ids));
@@ -44,7 +43,7 @@ namespace simple_Web.Controllers
 
         [HttpPut("activate")]
         public async Task<IActionResult> ActivateAsync(List<int> ids)
-            {
+        {
             var result = await ExecuteActionAsync(() => _userService.ActiveAsync(ids));
             return result ? RedirectToAction(nameof(Index)) : NotFound();
         }

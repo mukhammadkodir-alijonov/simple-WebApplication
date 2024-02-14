@@ -10,7 +10,7 @@ namespace simple_Web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IUserService _userService;
-        private const int PageSize = 2;
+        private const int PageSize = 20;
 
         public HomeController(ILogger<HomeController> logger, IUserService userService)
         {

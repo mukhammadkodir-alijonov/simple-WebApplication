@@ -10,7 +10,7 @@ namespace simple_Web.Service.ViewModels
         public DateTime LastLogin { get; set; }
         public StatusType Status {  get; set; }
         public string Email { get; set; } = string.Empty;
-        //public bool IsChecked { get; set; } = true;
+        public bool IsChecked { get; set; } = true;
         public static implicit operator UserViewModel(User model)
         {
             return new UserViewModel()
