@@ -81,6 +81,16 @@
             .fa-eye:hover {
                 color: #007bff;
             }
+
+        .btn.btn-lg.btn-registan{
+            width: 100%;
+            height: 40px;
+            background: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -88,7 +98,7 @@
         <h2>Welcome to SimpleWeb Registration</h2>
         <div class="form-group fullname">
             <label for="fullname">UserName</label>
-            <input type="text" asp-for=UserName id="fullname" placeholder="Enter your first name">
+            <input type="text" asp-for=UserName id="fullname" placeholder="Enter your UserName">
             <span asp-validation-for="UserName" class="text-danger"></span>
         </div>
 
