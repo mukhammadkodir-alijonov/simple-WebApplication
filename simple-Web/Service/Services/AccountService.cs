@@ -33,7 +33,8 @@ namespace simple_Web.Service.Services
             var emailcheck = await _repository.Users.FirstOrDefault(x => x.Email == registerDto.Email);
 
             if (emailcheck is not null)
-                throw new StatusCodeException(HttpStatusCode.Conflict, "Email alredy exist");
+                return false;
+                //throw new AlreadyExistingException(nameof(registerDto.Email), "Emil is already existed");
 
             var hasherResult = PasswordHasher.Hash(registerDto.Password);
             var user = _mapper.Map<User>(registerDto);
@@ -52,7 +53,7 @@ namespace simple_Web.Service.Services
             var user = await _repository.Users.FirstOrDefault(x => x.Email == accountLoginDto.Email);
             if (user != null)
             {
-                if(user.Status != StatusType.Blocked)
+                if (user.Status != StatusType.Blocked)
                 {
                     var hasherResult = PasswordHasher.Verify(accountLoginDto.Password, user.Salt, user.PasswordHash);
                     if (hasherResult)
@@ -64,7 +65,7 @@ namespace simple_Web.Service.Services
                     }
                     else throw new NotFoundException(nameof(accountLoginDto.Password), "Incorrect password!");
                 }
-                else throw new Exception("Your status is not Active");
+                else return string.Empty;
             }
             throw new NotFoundException(nameof(accountLoginDto.Email), "No user with this email is found!");
         }

@@ -15,7 +15,7 @@ namespace simple_Web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IUserService _userService;
-        private const int PageSize = 20;
+        private const int PageSize = 40;
         private readonly IHttpContextAccessor _contextAccessor;
 
         public HomeController(ILogger<HomeController> logger, IUserService userService,IHttpContextAccessor httpContextAccessor)

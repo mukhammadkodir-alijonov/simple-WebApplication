@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using simple_Web.Service.Common.Exceptions;
 using simple_Web.Service.Common.Helpers;
 using simple_Web.Service.Dtos;
 using simple_Web.Service.Interfaces;
+using simple_Web.Service.Services.Common;
 
 namespace simple_Web.Controllers
 {
@@ -23,6 +25,7 @@ namespace simple_Web.Controllers
         {
             if (ModelState.IsValid)
             {
+
                 bool result = await _service.RegisterAsync(accountRegisterDto);
                 if (result)
                 {
@@ -30,8 +33,10 @@ namespace simple_Web.Controllers
                 }
                 else
                 {
-                    return Register();
+                    ModelState.AddModelError("Email", "This Email is already Existed.");
+                    return View(accountRegisterDto);
                 }
+
             }
             else return Register();
         }
@@ -46,22 +51,27 @@ namespace simple_Web.Controllers
                 try
                 {
                     string token = await _service.LoginAsync(accountLoginDto);
-                    HttpContext.Response.Cookies.Append("X-Access-Token", token, new CookieOptions()
+                    if (token != string.Empty)
                     {
-                        HttpOnly = true,
-                        SameSite = SameSiteMode.Strict
-                    });
-                    return RedirectToAction("Index", "Home", new { area = "" });
+                        HttpContext.Response.Cookies.Append("X-Access-Token", token, new CookieOptions()
+                        {
+                            HttpOnly = true,
+                            SameSite = SameSiteMode.Strict
+                        });
+                        return RedirectToAction("Index", "Home", new { area = "" });
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("Password", "Your account is blocked, pls contact Admin");
+                        return View(accountLoginDto);
+                    }
                 }
-                catch (ModelErrorException modelError)
+                catch (NotFoundException ex)
                 {
-                    ModelState.AddModelError(modelError.Property, modelError.Message);
-                    return Login();
+                    ModelState.AddModelError("Email", ex.Message);
+                    return View(accountLoginDto);
                 }
-                catch
-                {
-                    return Login();
-                }
+                
             }
             else return Login();
         }

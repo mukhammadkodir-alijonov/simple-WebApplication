@@ -43,6 +43,7 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "simple_Web API V1");
     c.RoutePrefix = "area/swagger";
 });
+//app.UseMiddleware<ExceptionHandlerMiddleWare>();
 app.UseMiddleware<TokenRedirectMiddleware>();
 
 app.UseStatusCodePages(async context =>
