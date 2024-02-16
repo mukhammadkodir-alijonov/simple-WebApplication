@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using simple_Web.Domain.Entities;
 using simple_Web.Service.Common.Exceptions;
 using simple_Web.Service.Common.Utils;
@@ -28,6 +29,7 @@ namespace simple_Web.Controllers
         }
 
         [HttpPost("delete")]
+        [Authorize]
         public async Task<IActionResult> DeleteAsync(List<int> ids)
         {
             var result = await ExecuteActionAsync(() => _userService.DeleteAsync(ids));
@@ -35,6 +37,7 @@ namespace simple_Web.Controllers
         }
 
         [HttpPost("block")]
+        [Authorize]
         public async Task<IActionResult> BlockAsync(List<int> ids)
         {
             var result = await ExecuteActionAsync(() => _userService.BlockAsync(ids));
@@ -42,6 +45,7 @@ namespace simple_Web.Controllers
         }
 
         [HttpPost("unblock")]
+        [Authorize]
         public async Task<IActionResult> UnBlockAsync(List<int> ids)
         {
             var result = await ExecuteActionAsync(() => _userService.ActiveAsync(ids));
