@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using simple_Web.Domain.Entities;
 using simple_Web.Models;
@@ -23,7 +24,7 @@ namespace simple_Web.Controllers
             _userService = userService;
             _contextAccessor = httpContextAccessor;
         }
-
+        [Authorize]
         public async Task<IActionResult> Index(int page = 1)
         {
             ViewBag.UserName = _contextAccessor.HttpContext?.User.FindFirst("UserName")?.Value;
